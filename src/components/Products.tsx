@@ -3,12 +3,16 @@ import { motion } from 'framer-motion';
 import { ShoppingCart, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
-import { products } from '../constants/products';
+import { useOrder } from '../context/OrderContext';
+import { products, Product } from '../constants/products';
 
 export const Products = () => {
   const { t, language } = useLanguage();
+  const { addToCart } = useOrder();
 
-  const addToCart = (name: string) => {
+  const handleAddToCart = (product: Product) => {
+    addToCart(product);
+    const name = language === 'en' ? product.nameEn : product.nameAm;
     toast.success(`${name} ${t('common.added')} ${t('common.ready')}`);
   };
 
@@ -65,7 +69,7 @@ export const Products = () => {
                 </p>
                 
                 <button 
-                  onClick={() => addToCart(language === 'en' ? product.nameEn : product.nameAm)}
+                  onClick={() => handleAddToCart(product)}
                   className="w-full py-3 bg-white border-2 border-green-600 text-green-600 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-green-600 hover:text-white transition-colors group"
                 >
                   <ShoppingCart size={18} />
